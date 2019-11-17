@@ -1,0 +1,8 @@
+#root {
+  border: 1px solid red;
+}
+
+.night {
+  background: black;
+  color: white;
+}
