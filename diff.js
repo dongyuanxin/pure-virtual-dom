@@ -7,21 +7,23 @@ function checkChangeType(newNode, oldNode) {
     return CHANGE_TYPE_REPLACE;
   }
 
-  if (typeof newNode === 'string' && newNode !== oldNode) {
-    return CHANGE_TYPE_TEXT;
+  if (typeof newNode === 'string') {
+    if (newNode !== oldNode) {
+      return CHANGE_TYPE_TEXT;
+    }
+    return;
   }
 
   const propsChanged = Reflect
     .ownKeys(newNode.props)
     .reduce(
-      (prev, prop) => prev || (oldNode[prop] !== newNode[prop]), 
+      (prev, name) => prev || (oldNode.props[name] !== newNode.props[name]), 
       false
     );
 
   if (propsChanged) {
     return CHANGE_TYPE_PROP;
   }
-
   return;
 }
 
@@ -42,7 +44,7 @@ function replaceAttribute($node, removedAttrs, newAttrs) {
     .forEach(attr => $node.setAttribute(attr, newAttrs[attr]))
 }
 
-function diff($parent, newNode, oldNode, index = 0) {
+function updateEl($parent, newNode, oldNode, index = 0) {
   let changeType = null;
 
   if (!oldNode) {
